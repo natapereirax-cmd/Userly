@@ -1,10 +1,11 @@
 import './App.css'
+import Menu from './containers/menu/index';
 
 function App() {
 
   return (
-    <div></div>
+    <Menu />
   )
 }
 
-export default App
+export default App;
