@@ -14,8 +14,8 @@ export const StyledContainer = styled.div`
     margin: 60px auto;
     padding: 40px;
 
-    background: #4E4E4E;
-    color: #0D1117;
+    background: #1C1C1C;
+    color: #ffff;
 
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 24px;
