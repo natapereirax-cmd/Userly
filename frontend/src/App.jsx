@@ -1,17 +1,25 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Menu from './containers/menu/index';
-import Register from './containers/register';
+import Register from './containers/register/index';
+import Header from './components/header/index';
+import Footer from './components/footer/index';
+import AboutUs from './containers/about-us/index';
 
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Menu />}/>
-        <Route path='/register' element={<Register />}/>
-      </Routes>
+      <div className="main-div">
+        <Header/>
+        <Routes>
+          <Route path='/' element={<Menu />}/>
+          <Route path='/register' element={<Register />}/>
+          <Route path='/about' element={<AboutUs />}/>
+        </Routes>
+        <Footer/>
+      </div>
     </BrowserRouter>
   )
 }
