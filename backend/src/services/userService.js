@@ -6,7 +6,7 @@ function getAllUsers () {
 
 function createUser (firstname, lastname, email) {
 
-    return db.prepare(`INSERT INTO users VALUES (?, ?, ?)`).run(firstname, lastname, email);
+    return db.prepare(`INSERT INTO users (firstname, lastname, email) VALUES (?, ?, ?)`).run(firstname, lastname, email);
 }
 
 function deleteUser (id) {

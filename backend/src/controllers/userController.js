@@ -1,4 +1,3 @@
-const { error } = require('node:console');
 const userService = require('../services/userService');
 
 function getAllUsers (req, res, next) {
@@ -47,7 +46,7 @@ function createUser (req, res, next) {
 }
 
 function deleteUser (req, res, next) {
-    const id = Number(req.body.id);
+    const id = Number(req.params.id);
 
     if(!Number.isInteger(id)) {
         return res.status(400).json({ error: "Invalid id" });
@@ -55,6 +54,13 @@ function deleteUser (req, res, next) {
 
     try {
         const info = userService.deleteUser(id);
+
+        if (info.changes === 0) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+        return res.status(204).end();
     } catch (err) {
         next(err);
     }

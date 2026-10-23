@@ -2,23 +2,71 @@ import { StyledRegister } from "./style";
 import Button from "../../components/button";
 import { StyledContainer } from "../../components/main-div/style";
 import Icon from "../../components/icon";
+import { useState } from "react";
 
 export default function Register () {
-    return (<StyledRegister>
+
+    const [firstname, setFirstName] = useState("");
+    const [lastname, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+
+    async function send(event) {
+        event.preventDefault() 
+
+        try {
+            const response = await fetch("/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify({
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Register failed");
+            }
+
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    return (
+    <StyledRegister>
         <StyledContainer>
             <Icon />
-            <form action="">
+            <form onSubmit={send}>
                 <div className="form-div">
-                    <label htmlFor="">First name</label>
-                    <input type="text" />
+                    <label htmlFor="firstname">First name</label>
+                    <input 
+                    type="text" 
+                    id="firstname"
+                    required
+                    value={firstname}
+                    onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div className="form-div">
-                    <label htmlFor="">Last name</label>
-                    <input type="text" />
+                    <label htmlFor="lastname">Last name</label>
+                    <input 
+                    type="text" 
+                    id="lastname"
+                    required
+                    value={lastname}
+                    onChange={(e) => setLastName(e.target.value)} />
                 </div>
                 <div className="form-div">
-                    <label htmlFor="">Email</label>
-                    <input type='email' />
+                    <label htmlFor="email">Email</label>
+                    <input 
+                    type='email' 
+                    id="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <Button
                 type="submit"
