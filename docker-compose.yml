@@ -1,0 +1,17 @@
+services:
+  userly-backend:
+    build: ./backend
+    container_name: userly-backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/data:/data
+      - ./backend/certs:/app/certs:ro
+
+  userly-frontend:
+    build: ./frontend
+    container_name: userly-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - userly-backend
