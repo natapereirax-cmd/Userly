@@ -1,11 +1,29 @@
 services:
+  userly-certs:
+    image: alpine:3
+    container_name: userly-certs
+    volumes:
+      - certs:/certs
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        [ -f /certs/localhost-key.pem ] && exit 0
+        apk add --no-cache openssl >/dev/null
+        openssl req -x509 -newkey rsa:2048 -nodes -days 365 \
+          -keyout /certs/localhost-key.pem -out /certs/localhost-cert.pem \
+          -subj "/CN=localhost" \
+          -addext "subjectAltName=DNS:localhost,DNS:userly-backend,IP:127.0.0.1"
+
   userly-backend:
     build: ./backend
     container_name: userly-backend
     restart: unless-stopped
+    depends_on:
+      userly-certs:
+        condition: service_completed_successfully
     volumes:
       - ./backend/data:/data
-      - ./backend/certs:/app/certs:ro
+      - certs:/app/certs:ro
 
   userly-frontend:
     build: ./frontend
@@ -15,3 +33,6 @@ services:
       - "5173:80"
     depends_on:
       - userly-backend
+
+volumes:
+  certs:
