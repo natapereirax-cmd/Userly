@@ -7,20 +7,41 @@ export default function List () {
     const [users, setUsers] = useState([]);
 
     async function fetchUsers() {
+    try {
         const response = await fetch("/api/users");
+
+        if (!response.ok) {
+            throw new Error("Failed to load users");
+        }
+
         const data = await response.json();
         setUsers(data);
+        } catch (error) {
+            console.error(error);
+            alert("Could not load the users list.");
+        }
     }
 
     async function deleteUser(userId) {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+        return;
+    }
+
+    try {
         const response = await fetch(`/api/users/${userId}`, {
             method: "DELETE",
         });
 
-        if (response.ok) {
-            setUsers(users.filter((user) => user.id !== userId));
-        } else {
-            console.error("Failed to delete user");
+        if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            alert(data.error || "Failed to delete user.");
+            return;
+        }
+
+        setUsers((prev) => prev.filter((user) => user.id !== userId));
+        } catch (error) {
+            console.error(error);
+            alert("Could not connect to the server. Please try again later.");
         }
     }
 

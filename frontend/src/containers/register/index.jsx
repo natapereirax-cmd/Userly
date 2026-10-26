@@ -25,14 +25,18 @@ export default function Register () {
             });
 
             if (!response.ok) {
-                throw new Error("Register failed");
+                const data = await response.json().catch(() => ({}));
+                alert(data.error || "Register failed. Please try again.");
+                return;
             }
 
+            alert("User registered successfully!");
             setFirstName("");
             setLastName("");
             setEmail("");
         } catch (error) {
             console.error(error);
+            alert("Could not connect to the server. Please try again later.");
         }
     }
 
